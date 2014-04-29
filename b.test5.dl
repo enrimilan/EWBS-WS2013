@@ -1,0 +1,13 @@
+%Battery is empty.
+battery(b).
+
+const(cb, 5).
+c(b, is, empty).
+c(b, id, 11).
+p(b, ip, 12).
+
+%expect_e(b, 0).
+expect_c(b, is, empty).
+expect_c(b, id, 11).
+expect_p(b, ip, 12).
+expect_p(b, op, 11).

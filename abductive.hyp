@@ -1,0 +1,6 @@
+bad_battery_control(s).
+needs_maintenance(g).
+old_cells(b).
+ok(s).
+ok(g).
+ok(b).

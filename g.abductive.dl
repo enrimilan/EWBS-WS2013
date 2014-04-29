@@ -1,0 +1,55 @@
+generator(g).
+
+%The demanded power (P_id) is within the generators capacity (V).
+p(G, op, P_op) :- generator(G), 
+				  c(G, is, running), 
+				  c(G, id, P_id), 
+				  const(cg,V), 
+				  P_id<=V, 
+				  P_op=P_id,
+				  #int(P_op),
+				  ok(G).
+				 
+%The demanded power (P_id) is greater than the generators capacity (V).				 
+p(G, op, P_op) :-generator(G), 
+				 c(G, is, running), 
+				 c(G, id, P_id), 
+				 const(cg,V), 
+				 P_id>V, 
+				 P_op=V,
+				 #int(P_op),
+				 ok(G).
+		
+%The generator isn't running.		
+p(G, op, 0) :-generator(G), 
+			  c(G, is, not_running),
+			  ok(G).
+			  
+%----------------------------------------------------------------
+			%The generator needs maintenance
+%----------------------------------------------------------------
+
+%The demanded power (P_id) is within the generators capacity (V).
+p(G, op, P_op) :- generator(G), 
+				  c(G, is, running), 
+				  c(G, id, P_id), 
+				  const(cg,V), 
+				  P_id<=V, 
+				  P_op=P_id-5,
+				  #int(P_op),
+				  needs_maintenance(G).
+				 
+%The demanded power (P_id) is greater than the generators capacity (V).				 
+p(G, op, P_op) :-generator(G), 
+				 c(G, is, running), 
+				 c(G, id, P_id), 
+				 const(cg,V), 
+				 P_id>V, 
+				 P_op=V-5,
+				 #int(P_op),
+				 needs_maintenance(G).
+		
+%The generator isn't running.		
+p(G, op, 0) :-generator(G), 
+			  c(G, is, not_running),
+			  needs_maintenance(G).

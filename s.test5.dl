@@ -1,0 +1,18 @@
+%external power supply provides the same amount of power as the required load, less than 150% of load.
+
+substation(s).
+p(s, ipext, 24).
+c(s, il, 24).
+c(s, ig, running).
+p(s, ipb, 5).
+p(s, ipg, 6).
+
+expect_p(s, ipext, 24).
+expect_c(s, il, 24).
+expect_c(s, ig, running).
+expect_p(s, ipb, 5).
+expect_p(s, ipg, 6).
+expect_c(s, odg, 0).
+expect_c(s, odb, 0).
+expect_p(s, opb, 0).
+expect_p(s, ops, 35).

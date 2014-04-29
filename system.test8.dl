@@ -1,0 +1,9 @@
+%The power supply provides less power than required. 
+%The generator isn't running. The battery is empty. The other outputs odg and opb will remain unactivated.
+%1 kW will be sent to the battery via odb. There is no power on the battery to send back.
+
+c_in(sgenerator, not_running). 
+c_in(sbattery, empty).
+c_in(load, 22). 
+p_in(pin, 21).
+expect_p_out(pout, 21).

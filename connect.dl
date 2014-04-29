@@ -1,0 +1,46 @@
+const(cg, 20).
+const(cb, 5).
+
+substation(s).
+generator(g).
+battery(b).
+
+%-------------------------------------------------------------------------------------------------
+             %external inputs and outputs for all 3 components
+%-------------------------------------------------------------------------------------------------
+
+%Power coming into the system from the external power supply.
+p(s, ipext, P_in) :- p_in(pin, P_in).
+
+%The currently required amount of power(the load).
+c(s, il, Load) :- c_in(load, Load).
+
+%The current state of the generator.
+c(s, ig, Gen_state) :- c_in(sgenerator, Gen_state).
+c(g, is, Gen_state) :- c_in(sgenerator, Gen_state).
+
+%The current state of the battery.
+c(b, is, Batt_state) :- c_in(sbattery, Batt_state).
+
+%The amount of power leaving the system.
+p_out(pout, P_out) :- p(s, ops, P_out).
+
+%-------------------------------------------------------------------------------------------------
+             %connecting the outputs of the substation to the inputs of the generator and battery
+%-------------------------------------------------------------------------------------------------
+
+c(b, id, P) :- c(s, odb, P).
+p(b, ip, P) :- p(s, opb, P).
+c(g, id, P) :- c(s, odg, P).
+
+%-------------------------------------------------------------------------------------------------
+             %connecting the outputs of the generator to the inputs of the substation
+%-------------------------------------------------------------------------------------------------
+
+p(s, ipg, P) :- p(g, op, P).
+
+%-------------------------------------------------------------------------------------------------
+             %connecting the outputs of the battery to the inputs of the substation
+%-------------------------------------------------------------------------------------------------
+
+p(s, ipb, P) :- p(b, op, P).

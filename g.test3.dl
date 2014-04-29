@@ -1,0 +1,9 @@
+%generator not running
+generator(g). 
+const(cg, 10).
+c(g, id,10). 
+c(g, is, not_running).
+
+expect_c(g, id, 10). 
+expect_c(g, is, not_running).
+expect_p(g, op, 0).

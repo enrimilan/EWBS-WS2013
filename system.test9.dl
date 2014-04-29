@@ -1,0 +1,11 @@
+%The power supply provides less power than required. 
+%The generator is running, 21 kW will be requested via odg.
+%The other outputs odb and opb will remain unactivated.
+%The generator will return 20 kW via op, because the required amount
+%of power exceeded its capacity.
+
+c_in(sgenerator, running). 
+c_in(sbattery, empty).
+c_in(load, 24). 
+p_in(pin, 3).
+expect_p_out(pout, 23).

@@ -1,0 +1,14 @@
+%The power supply provides more power than required. 
+%Excess power of 9 kW will be redirected to the battery via opb.
+%The outputs odb and odg will remain unactivated.
+%Because the battery is half full, and the substation is not
+%demanding any additional power, the battery will not also
+%send any to the substation(op=ipb=0). The generator is running,
+%but there is no demanded power,so it also will not send any 
+%power to the substation (op=ipg=0).
+
+c_in(sgenerator, running). 
+c_in(sbattery, half_full).
+c_in(load, 15). 
+p_in(pin, 24).
+expect_p_out(pout, 15).

@@ -1,0 +1,169 @@
+substation(s).
+
+%The external power supply (P_in) provides less power than the required load (L), the generator is running.
+%Send the required difference to the generator.
+c(S, odg, Diff) :- substation(S),
+				   p(S, ipext, P_in),
+				   c(S, il, Load),
+				   P_in<Load,
+				   c(S, ig, running),
+				   Diff=Load-P_in,
+				   not ab(S).
+				   
+c(S, odb, 0) :- substation(S),
+				   p(S, ipext, P_in),
+				   c(S, il, Load),
+				   P_in<Load,
+				   c(S, ig, running),
+				   not ab(S).
+				   
+p(S, opb, 0) :- substation(S),
+				   p(S, ipext, P_in),
+				   c(S, il, Load),
+				   P_in<Load,
+				   c(S, ig, running),
+				   not ab(S).
+
+
+%The external power supply (P_in) provides less power than the required load (L), the generator isn't running.
+%Send the required difference to the battery.
+c(S, odb, Diff) :- substation(S),
+				   p(S, ipext, P_in),
+				   c(S, il, Load),
+				   P_in<Load,
+				   c(S, ig, not_running),
+				   Diff=Load-P_in,
+				   not ab(S).
+				   
+c(S, odg, 0) :- substation(S),
+				   p(S, ipext, P_in),
+				   c(S, il, Load),
+				   P_in<Load,
+				   c(S, ig, not_running),
+				   not ab(S).
+				   
+p(S, opb, 0) :- substation(S),
+				   p(S, ipext, P_in),
+				   c(S, il, Load),
+				   P_in<Load,
+				   c(S, ig, not_running),
+				   not ab(S).
+
+
+%The external power supply (P_in) provides more power than the required load (L).
+%Send the excess power to the battery.
+p(S, opb, Excess) :- substation(S),
+				   p(S, ipext, P_in),
+				   c(S, il, Load),
+				   P_in>Load,
+				   Excess=P_in - Load,
+				   not ab(S).
+				   
+c(S, odb, 0) :- substation(S),
+				   p(S, ipext, P_in),
+				   c(S, il, Load),
+				   P_in>Load,
+				   not ab(S).
+				   
+c(S, odg, 0) :- substation(S),
+				   p(S, ipext, P_in),
+				   c(S, il, Load),
+				   P_in>Load,
+				   not ab(S).
+
+				   
+%The external power supply (P_in) has the same power as the required load (L).
+%Do not activate any of the following outputs.
+c(S, odg, 0) :- substation(S),
+				p(S, ipext, P_in),
+				c(S, il, Load),
+				P_in==Load,
+				not ab(S).
+											
+c(S, odb, 0) :- substation(S),
+				p(S, ipext, P_in),
+				c(S, il, Load),
+				P_in==Load,
+				not ab(S).
+
+p(S, opb, 0) :- substation(S),
+				p(S, ipext, P_in),
+				c(S, il, Load),
+				P_in==Load,
+				not ab(S).				
+
+
+%The output power.
+p(S, ops, P_out) :- substation(S),
+					p(S, ipext, P_in),
+					c(S, il, Load),
+					p(S, ipb, P_batt),
+					p(S, ipg, P_gen),
+					c(S, ig, Gen_state),
+					p(S, opb, P_toBatt),
+					#mod(Load, 2, 0),
+					Sum1=P_in+P_gen,
+					Sum2=Sum1+P_batt,
+					Sum3=Sum2-P_toBatt,
+					Tmp=Load/2,
+					Req=Tmp*3,
+					Sum3>=Req,
+					P_out=Req,
+					not ab(S),
+					#int(P_out).
+					
+p(S, ops, P_out) :- substation(S),
+					p(S, ipext, P_in),
+					c(S, il, Load),
+					p(S, ipb, P_batt),
+					p(S, ipg, P_gen),
+					c(S, ig, Gen_state),
+					p(S, opb, P_toBatt),
+					Sum1=P_in+P_gen,
+					Sum2=Sum1+P_batt,
+					Sum3=Sum2-P_toBatt,
+					Tmp=Load/2,
+					Tmp2=Tmp*3,
+					Req=Tmp2+1,
+					#mod(Load, 2, 1),
+					Sum3>=Req,
+					P_out=Req,
+					not ab(S),
+					#int(P_out).
+					
+p(S, ops, P_out) :- substation(S),
+					p(S, ipext, P_in),
+					c(S, il, Load),
+					p(S, ipb, P_batt),
+					p(S, ipg, P_gen),
+					c(S, ig, Gen_state),
+					p(S, opb, P_toBatt),
+					Sum1=P_in+P_gen,
+					Sum2=Sum1+P_batt,
+					Sum3=Sum2-P_toBatt,
+					Tmp=Load/2,
+					Req=Tmp*3,
+					Sum3<Req,
+					#mod(Load, 2, 0),
+					P_out=Sum3,
+					not ab(S),
+					#int(P_out).
+					
+p(S, ops, P_out) :- substation(S),
+					p(S, ipext, P_in),
+					c(S, il, Load),
+					p(S, ipb, P_batt),
+					p(S, ipg, P_gen),
+					c(S, ig, Gen_state),
+					p(S, opb, P_toBatt),
+					Sum1=P_in+P_gen,
+					Sum2=Sum1+P_batt,
+					Sum3=Sum2-P_toBatt,
+					Tmp=Load/2,
+					Tmp2=Tmp*3,
+					Req=Tmp2+1,
+					#mod(Load, 2, 1),
+					Sum3<Req,
+					P_out=Sum3,
+					not ab(S),
+					#int(P_out).

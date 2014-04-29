@@ -1,0 +1,9 @@
+%demanded power greater than the generators capacity, but generator not running
+generator(g). 
+const(cg, 16).
+c(g, id,21). 
+c(g, is, not_running).
+
+expect_c(g, id, 21).
+expect_c(g, is, not_running).
+expect_p(g, op, 0).

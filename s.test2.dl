@@ -1,0 +1,18 @@
+%external power supply provides less power than the required load and the generator isn't running.
+
+substation(s).
+p(s, ipext, 13).
+c(s, il, 19).
+c(s, ig, not_running).
+p(s, ipb, 2).
+p(s, ipg, 5).
+
+expect_p(s, ipext, 13).
+expect_c(s, il, 19).
+expect_c(s, ig, not_running).
+expect_p(s, ipb, 2).
+expect_p(s, ipg, 5).
+expect_c(s, odg, 0).
+expect_c(s, odb, 6).
+expect_p(s, opb, 0).
+expect_p(s, ops, 20).

@@ -1,0 +1,10 @@
+%The power supply provides the same amount of power as required. 
+%None of the output interfaces will be activated. The generator is running,
+%but there is no demanded power,so it also will not send any 
+%power to the substation (op=ipg=0).
+
+c_in(sgenerator, running). 
+c_in(sbattery, full).
+c_in(load, 24). 
+p_in(pin, 24).
+expect_p_out(pout, 24).

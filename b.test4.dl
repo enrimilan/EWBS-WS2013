@@ -1,0 +1,13 @@
+%Remaining amount of the demanded power is less than or equal to the capacity of the battery (V), and the battery is full, id=excess.
+battery(b).
+
+const(cb, 5).
+c(b, is, full).
+c(b, id, 12).
+p(b, ip, 12).
+
+%expect_e(b, 12).
+expect_c(b, is, full).
+expect_c(b, id, 12).
+expect_p(b, ip, 12).
+expect_p(b, op, 12).

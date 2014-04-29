@@ -1,0 +1,138 @@
+battery(b).
+
+%The internal amount of the excess power, battery is full.
+e(B, E) :- battery(B),
+		   p(B, ip, P_sub),
+           c(B, is, full),
+		   E=P_sub,
+		   not ab(B),
+		   #int(E).
+
+%The internal amount of the excess power, battery is half full.		   
+e(B, 0) :- battery(B),
+		   p(B, ip, P_sub),
+           c(B, is, half_full),
+		   not ab(B).
+
+%The internal amount of the excess power, battery is empty.		   
+e(B, 0) :- battery(B),
+		   p(B, ip, P_sub),
+           c(B, is, empty),
+		   not ab(B).
+
+
+%Remaining amount of the demanded power (R) is less than or equal to the capacity of the battery (V), and the battery is full, id>=excess.
+p(B, op, P_toSub) :- battery(B),
+				     c(B, is, full),
+					 c(B, id, P_dem),
+					 p(B, ip, P_sub),
+					 P_sub<P_dem,
+					 R=P_dem - P_sub,
+					 const(cb, V),
+					 R<=V,
+					 e(B, E),
+					 P_dem>=E,
+					 P_toSub=P_dem,
+					 not ab(B),
+					 #int(P_toSub).
+
+%Remaining amount of the demanded power (R) is less than or equal to the capacity of the battery (V), and the battery is full, id<excess.	 
+p(B, op, P_toSub) :- battery(B),
+				     c(B, is, full),
+					 c(B, id, P_dem),
+					 p(B, ip, P_sub),
+					 P_sub<P_dem,
+					 R=P_dem - P_sub,
+					 const(cb, V),
+					 R<=V,
+					 e(B, E),
+					 P_dem<E,
+					 P_toSub=E,
+					 not ab(B),
+					 #int(P_toSub).
+
+%Remaining amount of the demanded power (R) is greater than capacity of the battery (V), and the battery is full.								 
+p(B, op, P_toSub) :- battery(B),
+				     c(B, is, full),
+					 c(B, id, P_dem),
+					 p(B, ip, P_sub),
+					 P_sub<P_dem,
+					 R=P_dem - P_sub,
+					 const(cb, V),
+					 R>V,
+					 P_toSub=P_sub+V,
+					 not ab(B),
+					 #int(P_toSub).
+
+%Remaining amount of the demanded power (R) is less than or equal to the capacity of the battery (V), and the battery is half full, id>=excess.					 
+p(B, op, P_toSub) :- battery(B),
+				     c(B, is, half_full),
+					 c(B, id, P_dem),
+					 p(B, ip, P_sub),
+					 P_sub<P_dem,
+					 R=P_dem - P_sub,
+					 const(cb, V),
+					 R<=V,
+					 e(B, E),
+					 P_dem>=E,
+					 P_toSub=P_dem,
+					 not ab(B),
+					 #int(P_toSub).
+
+%Remaining amount of the demanded power (R) is less than or equal to the capacity of the battery (V), and the battery is half full, id<excess.					 
+p(B, op, P_toSub) :- battery(B),
+				     c(B, is, half_full),
+					 c(B, id, P_dem),
+					 p(B, ip, P_sub),
+					 P_sub<P_dem,
+					 R=P_dem - P_sub,
+ 					 const(cb, V),
+					 R<=V,
+					 e(B, E),
+					 P_dem<E,
+					 P_toSub=E,
+					 not ab(B),
+					 #int(P_toSub).
+
+%Remaining amount of the demanded power (R) is greater than capacity of the battery (V), and the battery is half full.					 
+p(B, op, P_toSub) :- battery(B),
+				     c(B, is, half_full),
+					 c(B, id, P_dem),
+					 p(B, ip, P_sub),
+					 P_sub<P_dem,
+					 R=P_dem - P_sub,
+					 const(cb, V),
+					 R>V,
+					 P_toSub=P_sub+V,
+					 not ab(B),
+					 #int(P_toSub).
+
+
+%The battery is empty.					 
+p(B, op, P_dem) :- battery(B),
+				  c(B, is, empty),
+				  p(B, ip, P_sub),
+				  c(B, id, P_dem),
+				  P_sub>=P_dem,
+				  not ab(B).
+				  
+p(B, op, P_dem) :- battery(B),
+				  c(B, is, half_full),
+				  p(B, ip, P_sub),
+				  c(B, id, P_dem),
+				  P_sub>=P_dem,
+				  not ab(B).
+				  
+p(B, op, P_sub) :- battery(B),
+				  c(B, is, full),
+				  p(B, ip, P_sub),
+				  c(B, id, P_dem),
+				  P_sub>=P_dem,
+				  not ab(B).
+				  				 
+p(B, op, P_sub) :- battery(B),
+				  c(B, is, empty),
+				  p(B, ip, P_sub),
+				  c(B, id, P_dem),
+				  P_sub<P_dem,
+				  not ab(B).

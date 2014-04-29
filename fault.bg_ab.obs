@@ -1,0 +1,6 @@
+%Battery and generator do not work properly.
+p(g, op, 3).
+c(s, odb, 3).
+p(s, opb, 0).
+c(s, odg, 0).
+p(b, op, 2).
